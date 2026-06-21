@@ -19,7 +19,7 @@ services:
     networks:
       - hermes-net
     volumes:
-      - /home/aym-n/homelab-stack/hermes/data/.hermes:/opt/data
+      - /home/aym-n/homelab-stack.bak/hermes/data/.hermes:/opt/data
     environment:
       - HERMES_HOME=/opt/data
       - HERMES_UID=10000
@@ -36,9 +36,9 @@ services:
       - hermes-net
       - traefik-net
     volumes:
-      - /home/aym-n/homelab-stack/hermes/data/.hermes:/home/hermeswebui/.hermes
+      - /home/aym-n/homelab-stack.bak/hermes/data/.hermes:/home/hermeswebui/.hermes
       - hermes-agent-src:/home/hermeswebui/.hermes/hermes-agent
-      - /home/aym-n/homelab-stack/hermes/data/workspace:/workspace
+      - /home/aym-n/homelab-stack.bak/hermes/data/workspace:/workspace
     env_file:
       - .env
     environment:
