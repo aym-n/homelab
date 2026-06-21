@@ -1,0 +1,7 @@
+# Spotify playlists to sync into Navidrome via spotDL.
+# Copy this file to ./playlists, then replace the placeholder URL.
+#
+# Blank lines and lines beginning with # are ignored.
+# Add one Spotify playlist URL per line.
+
+https://open.spotify.com/playlist/PLACEHOLDER_PLAYLIST_ID
