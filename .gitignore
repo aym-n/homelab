@@ -3,3 +3,7 @@
 !.env.example
 **/data/
 **/.hermes/
+
+# Runtime logs
+**/logs/
+*.log

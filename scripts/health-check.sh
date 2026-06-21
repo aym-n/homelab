@@ -1,7 +1,17 @@
-#!/bin/bash
+#!/usr/bin/env bash
 set -euo pipefail
-hosts=(home cloud vault photos hermes dockge traefik)
-for h in "${hosts[@]}"; do
-  code=$(curl -s -o /dev/null -w '%{http_code}' -H "Host: ${h}.aymn.systems" http://127.0.0.1/ || echo fail)
-  echo "$code ${h}.aymn.systems"
+
+urls=(
+  https://home.aymn.systems
+  https://dockge.aymn.systems
+  https://photos.aymn.systems
+  https://traefik.aymn.systems
+)
+
+for url in "${urls[@]}"; do
+  code=$(curl -s -o /dev/null -w "%{http_code}" --max-time 10 "$url" || true)
+  printf "%s %s\n" "$code" "$url"
 done
+
+echo "--- containers ---"
+docker ps --format "{{.Names}}: {{.Status}}"
