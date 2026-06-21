@@ -15,3 +15,16 @@ cd ~/homelab/stacks/traefik && docker compose up -d
 ```
 
 Use `docker compose` v2 only (never `docker-compose` v1).
+
+## Navidrome tools
+Download Spotify tracks or playlists into the Navidrome music library with the host spotDL install:
+
+```bash
+~/homelab/scripts/spotdl-navidrome.sh download '<spotify-url-or-playlist>'
+```
+
+Upgrade spotDL with:
+
+```bash
+pipx install spotdl --force
+```
