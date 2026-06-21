@@ -1,0 +1,12 @@
+http:
+  routers:
+    immich-router:
+      rule: "Host(`photos.aymn.systems`)"
+      service: immich-service
+      entryPoints:
+        - web
+  services:
+    immich-service:
+      loadBalancer:
+        servers:
+          - url: "http://host.docker.internal:2283"

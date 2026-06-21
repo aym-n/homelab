@@ -1,0 +1,12 @@
+http:
+  routers:
+    vaultwarden-router:
+      rule: "Host(`vault.aymn.systems`)"
+      service: vaultwarden-service
+      entryPoints:
+        - web
+  services:
+    vaultwarden-service:
+      loadBalancer:
+        servers:
+          - url: "http://vaultwarden:80"

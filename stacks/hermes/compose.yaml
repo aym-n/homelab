@@ -1,0 +1,70 @@
+services:
+  ollama:
+    image: ollama/ollama:latest
+    container_name: ollama
+    restart: unless-stopped
+    mem_limit: 2g
+    networks:
+      - hermes-net
+    volumes:
+      - ollama_data:/root/.ollama
+    ports:
+      - "127.0.0.1:11434:11434"
+
+  hermes-harness:
+    image: nousresearch/hermes-agent:latest
+    container_name: hermes-harness
+    restart: unless-stopped
+    command: gateway run
+    networks:
+      - hermes-net
+    volumes:
+      - /home/aym-n/homelab-stack/hermes/data/.hermes:/opt/data
+    environment:
+      - HERMES_HOME=/opt/data
+      - HERMES_UID=10000
+      - HERMES_GID=10000
+
+  hermes:
+    image: ghcr.io/nesquena/hermes-webui:latest
+    container_name: hermes
+    restart: unless-stopped
+    depends_on:
+      - hermes-harness
+      - ollama
+    networks:
+      - hermes-net
+      - traefik-net
+    volumes:
+      - /home/aym-n/homelab-stack/hermes/data/.hermes:/home/hermeswebui/.hermes
+      - hermes-agent-src:/home/hermeswebui/.hermes/hermes-agent
+      - /home/aym-n/homelab-stack/hermes/data/workspace:/workspace
+    env_file:
+      - .env
+    environment:
+      - HERMES_WEBUI_HOST=0.0.0.0
+      - HERMES_WEBUI_PORT=8787
+      - HERMES_WEBUI_STATE_DIR=/home/hermeswebui/.hermes/webui
+      - WANTED_UID=10000
+      - WANTED_GID=10000
+    labels:
+      - traefik.enable=true
+      - traefik.docker.network=homelab-stack_traefik-net
+      - traefik.http.routers.hermes.rule=Host(`hermes.aymn.systems`)
+      - traefik.http.routers.hermes.entrypoints=web
+      - traefik.http.services.hermes.loadbalancer.server.port=8787
+
+networks:
+  hermes-net:
+    external: true
+    name: hermes-net
+  traefik-net:
+    name: homelab-stack_traefik-net
+    external: true
+
+volumes:
+  hermes-agent-src:
+    external: true
+  ollama_data:
+    external: true
+    name: ollama_data
