@@ -1,0 +1,28 @@
+services:
+  navidrome:
+    image: deluan/navidrome:latest
+    container_name: navidrome
+    restart: unless-stopped
+    env_file:
+      - .env
+    environment:
+      ND_SCANSCHEDULE: 1h
+      ND_LOGLEVEL: info
+      ND_SESSIONTIMEOUT: 24h
+      ND_BASEURL: ""
+    volumes:
+      - /data/compose/navidrome/data:/data
+      - /data/compose/navidrome/music:/music:ro
+    networks:
+      - traefik-net
+    labels:
+      - traefik.enable=true
+      - traefik.docker.network=homelab-stack_traefik-net
+      - traefik.http.routers.navidrome.rule=Host(`music.aymn.systems`)
+      - traefik.http.routers.navidrome.entrypoints=web
+      - traefik.http.services.navidrome.loadbalancer.server.port=4533
+
+networks:
+  traefik-net:
+    external: true
+    name: homelab-stack_traefik-net
