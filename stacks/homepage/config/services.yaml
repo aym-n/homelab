@@ -1,0 +1,41 @@
+- Homelab:
+    - Homepage:
+        href: https://home.aymn.systems
+        description: This dashboard
+        icon: homepage
+    - Dockge:
+        href: https://dockge.aymn.systems
+        description: Docker stack manager
+        icon: mdi-docker
+    - Traefik:
+        href: https://traefik.aymn.systems
+        description: Reverse proxy dashboard
+        icon: traefik
+
+- Apps:
+    - Nextcloud:
+        href: https://cloud.aymn.systems
+        description: Files, calendar, contacts
+        icon: nextcloud
+    - Immich:
+        href: https://photos.aymn.systems
+        description: Photo and video backup
+        icon: immich
+    - Vaultwarden:
+        href: https://vault.aymn.systems
+        description: Password manager
+        icon: bitwarden
+    - Hermes:
+        href: https://hermes.aymn.systems
+        description: AI assistant
+        icon: si-openai
+    - Navidrome:
+        href: https://music.aymn.systems
+        description: Music server
+        icon: si-spotify
+
+- Admin:
+    - SSH:
+        href: ssh://aym-n@100.79.113.109
+        description: Tailscale admin access
+        icon: mdi-console

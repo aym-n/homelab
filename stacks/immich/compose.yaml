@@ -1,0 +1,57 @@
+services:
+  immich-server:
+    container_name: immich_server
+    image: ghcr.io/immich-app/immich-server:release
+    command: ["start.sh", "immich"]
+    volumes:
+      - /data/compose/4/library:/data
+      - /etc/localtime:/etc/localtime:ro
+    env_file:
+      - .env
+    ports:
+      - "2283:2283"
+    depends_on:
+      - redis
+      - database
+    restart: unless-stopped
+    networks:
+      - immich-net
+
+  immich-machine-learning:
+    container_name: immich_machine_learning
+    image: ghcr.io/immich-app/immich-machine-learning:release
+    volumes:
+      - immich_model_cache:/cache
+    env_file:
+      - .env
+    restart: unless-stopped
+    networks:
+      - immich-net
+
+  redis:
+    container_name: immich_redis
+    image: valkey/valkey:8-bookworm
+    restart: unless-stopped
+    networks:
+      - immich-net
+
+  database:
+    container_name: immich_postgres
+    image: ghcr.io/immich-app/postgres:14-vectorchord0.4.3-pgvectors0.2.0
+    env_file:
+      - .env
+    volumes:
+      - /data/compose/4/postgres:/var/lib/postgresql/data
+    restart: unless-stopped
+    networks:
+      - immich-net
+
+volumes:
+  immich_model_cache:
+    external: true
+    name: immich_model-cache
+
+networks:
+  immich-net:
+    name: immich_default
+    external: true

@@ -1,0 +1,19 @@
+# ./homepage-config/settings.yaml
+
+title: homelab
+background: https://images.unsplash.com/photo-1502790671504-542ad42d5189?auto=format&fit=crop&w=2560&q=80
+# You can change the background to a local file or another URL.
+# Or comment it out for a solid color background.
+
+theme: catppuccin-macchiato
+color: blue
+
+layout:
+  # Define the layout of the homepage with two columns
+  Apps:
+    style: row
+    # You can optionally add an icon to the group title
+    # icon: mdi-apps
+  Management:
+    style: row
+    # icon: mdi-server

@@ -1,0 +1,12 @@
+http:
+  routers:
+    navidrome-router:
+      rule: "Host(`music.aymn.systems`)"
+      entryPoints:
+        - web
+      service: navidrome-service
+  services:
+    navidrome-service:
+      loadBalancer:
+        servers:
+          - url: "http://host.docker.internal:4533"

@@ -1,0 +1,27 @@
+services:
+  dockge:
+    image: louislam/dockge:1
+    container_name: dockge
+    restart: unless-stopped
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - dockge_data:/app/data
+      - /home/aym-n/homelab/stacks:/opt/stacks
+    environment:
+      DOCKGE_STACKS_DIR: /opt/stacks
+    networks:
+      - traefik-net
+    labels:
+      - traefik.enable=true
+      - traefik.docker.network=homelab-stack_traefik-net
+      - traefik.http.routers.dockge.rule=Host(`dockge.aymn.systems`)
+      - traefik.http.routers.dockge.entrypoints=web
+      - traefik.http.services.dockge.loadbalancer.server.port=5001
+
+volumes:
+  dockge_data:
+
+networks:
+  traefik-net:
+    name: homelab-stack_traefik-net
+    external: true

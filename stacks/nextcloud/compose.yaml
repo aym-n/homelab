@@ -1,0 +1,38 @@
+# nextcloud/docker-compose.yml
+version: "3.8"
+
+services:
+  nextcloud-aio-mastercontainer:
+    image: nextcloud/all-in-one:latest
+    container_name: nextcloud-aio-mastercontainer
+    init: true
+    restart: always
+    volumes:
+      - nextcloud_aio_mastercontainer:/mnt/docker-aio-config
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+    ports:
+      # Optional: Remove this if you don't need to access the AIO interface directly.
+      # The Traefik setup will handle all external traffic on ports 80/443.
+      - 8080:8080
+    environment:
+      # This is a crucial environment variable. Choose a port that is NOT in use.
+      - APACHE_PORT=11000 
+      # This makes the Apache container listen on all interfaces, allowing Traefik to connect.
+      - APACHE_IP_BINDING=0.0.0.0
+      # This connects Nextcloud's internal containers to your Traefik network.
+      - APACHE_ADDITIONAL_NETWORK=homelab-stack_traefik-net 
+      # Your domain name.
+      - NEXTCLOUD_DOMAIN=cloud.aymn.systems 
+    networks:
+      - nextcloud-aio
+      - homelab-stack_traefik-net  # Connect the master container to the Traefik network
+
+volumes:
+  nextcloud_aio_mastercontainer:
+    name: nextcloud_aio_mastercontainer
+
+networks:
+  nextcloud-aio:
+    name: nextcloud-aio
+  homelab-stack_traefik-net:
+    external: true  # This tells Docker that the network already exists
