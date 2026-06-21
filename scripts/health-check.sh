@@ -6,6 +6,7 @@ urls=(
   https://dockge.aymn.systems
   https://photos.aymn.systems
   https://traefik.aymn.systems
+  https://music.aymn.systems
 )
 
 for url in "${urls[@]}"; do
