@@ -17,6 +17,10 @@
         href: https://photos.aymn.systems
         description: Photo and video backup
         icon: immich
+    - Navidrome:
+        href: https://music.aymn.systems
+        description: Music streaming
+        icon: mdi-music
 
 - Admin:
     - SSH:
