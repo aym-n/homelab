@@ -1,0 +1,11 @@
+[Unit]
+Description=Hourly Spotify playlist sync for Navidrome
+
+[Timer]
+OnBootSec=5m
+OnUnitActiveSec=1h
+Persistent=true
+Unit=spotdl-navidrome-sync.service
+
+[Install]
+WantedBy=timers.target

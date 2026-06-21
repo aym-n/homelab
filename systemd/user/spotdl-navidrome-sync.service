@@ -1,0 +1,15 @@
+[Unit]
+Description=Sync Spotify playlists into Navidrome with spotDL
+Documentation=file:/home/aym-n/homelab/README.md
+
+[Service]
+Type=oneshot
+WorkingDirectory=/home/aym-n/homelab
+Environment=SPOTDL_THREADS=1
+Environment=SPOTDL_MAX_RETRIES=2
+Nice=10
+IOSchedulingClass=best-effort
+IOSchedulingPriority=7
+MemoryHigh=1G
+MemoryMax=1536M
+ExecStart=/home/aym-n/homelab/scripts/spotdl-navidrome-sync.sh

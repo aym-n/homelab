@@ -28,3 +28,51 @@ Upgrade spotDL with:
 ```bash
 pipx install spotdl --force
 ```
+
+### Spotify playlist sync
+
+Create the local playlist config from the tracked example, then replace the placeholder with your Spotify playlist URL:
+
+```bash
+cp ~/homelab/stacks/navidrome/playlists.example ~/homelab/stacks/navidrome/playlists
+$EDITOR ~/homelab/stacks/navidrome/playlists
+```
+
+The real playlist file is `~/homelab/stacks/navidrome/playlists` and is ignored by git. Add one Spotify playlist URL per line; blank lines and lines beginning with `#` are skipped.
+
+The sync script is intentionally conservative to avoid overlapping runs and OOMs:
+
+- `SPOTDL_THREADS=1` by default; passed to spotDL as `--threads`.
+- `SPOTDL_MAX_RETRIES=2` by default; retries each playlist sequentially before failing.
+- `SPOTDL_EXTRA_ARGS` can pass extra whitespace-separated spotDL options.
+- `SPOTDL_LOCK_FILE` can override the default lock at `$XDG_RUNTIME_DIR/spotdl-navidrome-sync.lock` or `/tmp/spotdl-navidrome-sync.lock`.
+
+Run a sync manually with either command:
+
+```bash
+~/homelab/scripts/spotdl-navidrome-sync.sh
+systemctl --user start spotdl-navidrome-sync.service
+```
+
+Validate configuration without downloading:
+
+```bash
+~/homelab/scripts/spotdl-navidrome-sync.sh --check
+```
+
+Run manually with reduced or increased spotDL threads:
+
+```bash
+SPOTDL_THREADS=1 ~/homelab/scripts/spotdl-navidrome-sync.sh
+SPOTDL_THREADS=2 SPOTDL_MAX_RETRIES=1 ~/homelab/scripts/spotdl-navidrome-sync.sh
+```
+
+Manage the hourly timer with:
+
+```bash
+systemctl --user enable --now spotdl-navidrome-sync.timer
+systemctl --user status spotdl-navidrome-sync.timer
+systemctl --user list-timers spotdl-navidrome-sync.timer
+journalctl --user -u spotdl-navidrome-sync.service -n 100 --no-pager
+```
+
