@@ -6,9 +6,9 @@ Documentation=file:/home/aym-n/homelab/README.md
 Type=oneshot
 WorkingDirectory=/home/aym-n/homelab
 Environment=SPOTDL_THREADS=3
-Environment=SPOTDL_MAX_RETRIES=1
-Environment=SPOTDL_GENERATE_LRC=0
-Environment=SPOTDL_LYRICS_PROVIDERS=genius
+Environment=SPOTDL_MAX_RETRIES=2
+Environment=SPOTDL_GENERATE_LRC=1
+Environment=SPOTDL_LYRICS_PROVIDERS=synced
 Nice=10
 IOSchedulingClass=best-effort
 IOSchedulingPriority=7
