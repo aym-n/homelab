@@ -15,6 +15,7 @@ services:
       - "traefik.docker.network=homelab-stack_traefik-net"
       - "traefik.http.routers.homepage.rule=Host(`home.aymn.systems`)"
       - "traefik.http.routers.homepage.entrypoints=web"
+      - "traefik.http.routers.homepage.middlewares=homelab-basicauth@file"
       - "traefik.http.services.homepage.loadbalancer.server.port=3000"
 
 networks:
