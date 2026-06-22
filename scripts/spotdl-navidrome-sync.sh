@@ -199,11 +199,11 @@ echo "Configured Navidrome music sync: spotdl_sources=${#spotdl_queries[@]}, thr
 
 if [[ $dry_run -eq 1 ]]; then
   echo "Dry run only; no downloads will be started."
-  echo "Would run spotDL sequentially with: $spotdl_bin --threads $spotdl_threads --archive $spotdl_archive_file [lyrics args] [extra args] download <source>"
+  echo "Would run spotDL sequentially with: $spotdl_bin --threads $spotdl_threads --archive $spotdl_archive_file [lyrics args] [extra args] [source auth args] download <source>"
   for index in "${!spotdl_queries[@]}"; do
-    auth_suffix=""
-    [[ ${spotdl_query_user_auth[$index]} -eq 1 ]] && auth_suffix=" --user-auth"
-    echo "  - ${spotdl_query_labels[$index]}: download${auth_suffix} $(display_query "${spotdl_queries[$index]}")"
+    auth_prefix=""
+    [[ ${spotdl_query_user_auth[$index]} -eq 1 ]] && auth_prefix="--user-auth "
+    echo "  - ${spotdl_query_labels[$index]}: ${auth_prefix}download $(display_query "${spotdl_queries[$index]}")"
   done
   exit 0
 fi
@@ -218,7 +218,7 @@ for index in "${!spotdl_queries[@]}"; do
   fi
 
   echo "Downloading/updating ${spotdl_query_labels[$index]} $source_number/${#spotdl_queries[@]}."
-  until "$spotdl_bin" --threads "$spotdl_threads" --archive "$spotdl_archive_file" "${lyrics_args[@]}" "${extra_args[@]}" download "${source_args[@]}" "${spotdl_queries[$index]}"; do
+  until "$spotdl_bin" --threads "$spotdl_threads" --archive "$spotdl_archive_file" "${lyrics_args[@]}" "${extra_args[@]}" "${source_args[@]}" download "${spotdl_queries[$index]}"; do
     if (( attempt >= max_attempts )); then
       echo "spotDL failed for source $source_number/${#spotdl_queries[@]} after $attempt attempt(s)." >&2
       exit 1
