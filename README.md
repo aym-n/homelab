@@ -62,11 +62,11 @@ Spotify liked songs require spotDL OAuth. Run the sync manually once, complete t
 The sync script is intentionally conservative to avoid overlapping runs, OOMs, and accidental music deletion:
 
 - `SPOTDL_THREADS=1` by default; passed to spotDL as `--threads`.
-- `SPOTDL_MAX_RETRIES=2` by default; retries each source sequentially before failing.
+- `SPOTDL_MAX_RETRIES=1` by default; passed to spotDL as `--max-retries` and used for one script-level retry per source before failing.
 - `SPOTDL_EXTRA_ARGS` can pass extra whitespace-separated spotDL options.
 - `SPOTDL_LOCK_FILE` can override the default lock at `$XDG_RUNTIME_DIR/spotdl-navidrome-sync.lock` or `/tmp/spotdl-navidrome-sync.lock`.
-- `SPOTDL_GENERATE_LRC=1` by default; passes `--lyrics synced --generate-lrc` so spotDL writes synced `.lrc` sidecar files when lyrics are available.
-- `SPOTDL_LYRICS_PROVIDERS=synced` controls the whitespace-separated lyrics providers used with `--lyrics`.
+- `SPOTDL_LYRICS_PROVIDERS=genius` by default; passed to spotDL as `--lyrics genius` for embedded unsynced lyrics without using the noisy syncedlyrics provider. Set it to `none` to disable lyrics entirely.
+- `SPOTDL_GENERATE_LRC=0` by default. LRC sidecar files require `SPOTDL_LYRICS_PROVIDERS` to include `synced`, which uses syncedlyrics providers such as NetEase and can be slow/noisy when those providers time out.
 
 Run a sync manually with either command:
 
@@ -85,7 +85,7 @@ Run manually with reduced or increased spotDL threads:
 
 ```bash
 SPOTDL_THREADS=1 ~/homelab/scripts/spotdl-navidrome-sync.sh
-SPOTDL_THREADS=2 SPOTDL_MAX_RETRIES=1 ~/homelab/scripts/spotdl-navidrome-sync.sh
+SPOTDL_THREADS=2 SPOTDL_MAX_RETRIES=1 SPOTDL_LYRICS_PROVIDERS=none ~/homelab/scripts/spotdl-navidrome-sync.sh
 ```
 
 Manage the hourly timer with:

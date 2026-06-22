@@ -8,10 +8,10 @@ playlists_file=${PLAYLISTS_FILE:-$repo_dir/stacks/navidrome/playlists}
 sources_file=${SOURCES_FILE:-$repo_dir/stacks/navidrome/sources}
 spotdl_archive_file=${SPOTDL_ARCHIVE_FILE:-$music_dir/.spotdl-archive.txt}
 spotdl_threads=${SPOTDL_THREADS:-1}
-spotdl_max_retries=${SPOTDL_MAX_RETRIES:-2}
+spotdl_max_retries=${SPOTDL_MAX_RETRIES:-1}
 spotdl_extra_args=${SPOTDL_EXTRA_ARGS:-}
-spotdl_generate_lrc=${SPOTDL_GENERATE_LRC:-1}
-spotdl_lyrics_providers=${SPOTDL_LYRICS_PROVIDERS:-synced}
+spotdl_generate_lrc=${SPOTDL_GENERATE_LRC:-0}
+spotdl_lyrics_providers=${SPOTDL_LYRICS_PROVIDERS:-genius}
 runtime_dir=${XDG_RUNTIME_DIR:-/tmp}
 lock_file=${SPOTDL_LOCK_FILE:-$runtime_dir/spotdl-navidrome-sync.lock}
 dry_run=0
@@ -186,20 +186,31 @@ if [[ -n $spotdl_extra_args ]]; then
 fi
 
 lyrics_args=()
+read -r -a lyrics_providers <<< "$spotdl_lyrics_providers"
+if [[ ${#lyrics_providers[@]} -gt 0 && ${lyrics_providers[0],,} != "none" ]]; then
+  lyrics_args+=(--lyrics "${lyrics_providers[@]}")
+fi
 if [[ $spotdl_generate_lrc -eq 1 ]]; then
-  read -r -a lyrics_providers <<< "$spotdl_lyrics_providers"
-  if [[ ${#lyrics_providers[@]} -eq 0 ]]; then
-    echo "SPOTDL_LYRICS_PROVIDERS must include at least one provider when SPOTDL_GENERATE_LRC is enabled." >&2
+  has_synced_provider=0
+  for provider in "${lyrics_providers[@]}"; do
+    if [[ ${provider,,} == "synced" ]]; then
+      has_synced_provider=1
+      break
+    fi
+  done
+  if [[ $has_synced_provider -ne 1 ]]; then
+    echo "SPOTDL_GENERATE_LRC requires SPOTDL_LYRICS_PROVIDERS to include synced." >&2
+    echo "Keep SPOTDL_GENERATE_LRC=0 to avoid syncedlyrics NetEase/Megalobiz timeouts." >&2
     exit 1
   fi
-  lyrics_args+=(--lyrics "${lyrics_providers[@]}" --generate-lrc)
+  lyrics_args+=(--generate-lrc)
 fi
 
 echo "Configured Navidrome music sync: spotdl_sources=${#spotdl_queries[@]}, threads=$spotdl_threads, max_retries=$spotdl_max_retries, generate_lrc=$spotdl_generate_lrc, lyrics_providers=$spotdl_lyrics_providers, music_dir=$music_dir, spotdl_archive=$spotdl_archive_file."
 
 if [[ $dry_run -eq 1 ]]; then
   echo "Dry run only; no downloads will be started."
-  echo "Would run spotDL sequentially with: $spotdl_bin --threads $spotdl_threads --archive $spotdl_archive_file [lyrics args] [extra args] [source auth args] download <source>"
+  echo "Would run spotDL sequentially with: $spotdl_bin [lyrics args] --threads $spotdl_threads --max-retries $spotdl_max_retries --archive $spotdl_archive_file [extra args] [source auth args] download <source>"
   for index in "${!spotdl_queries[@]}"; do
     auth_prefix=""
     [[ ${spotdl_query_user_auth[$index]} -eq 1 ]] && auth_prefix="--user-auth "
@@ -218,7 +229,7 @@ for index in "${!spotdl_queries[@]}"; do
   fi
 
   echo "Downloading/updating ${spotdl_query_labels[$index]} $source_number/${#spotdl_queries[@]}."
-  until "$spotdl_bin" --threads "$spotdl_threads" --archive "$spotdl_archive_file" "${lyrics_args[@]}" "${extra_args[@]}" "${source_args[@]}" download "${spotdl_queries[$index]}"; do
+  until "$spotdl_bin" "${lyrics_args[@]}" --threads "$spotdl_threads" --max-retries "$spotdl_max_retries" --archive "$spotdl_archive_file" "${extra_args[@]}" "${source_args[@]}" download "${spotdl_queries[$index]}"; do
     if (( attempt >= max_attempts )); then
       echo "spotDL failed for source $source_number/${#spotdl_queries[@]} after $attempt attempt(s)." >&2
       exit 1
