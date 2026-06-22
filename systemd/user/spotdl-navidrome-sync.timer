@@ -1,5 +1,5 @@
 [Unit]
-Description=Hourly Navidrome music source sync
+Description=Hourly Spotify playlist sync for Navidrome
 
 [Timer]
 OnBootSec=5m

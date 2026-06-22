@@ -1,5 +1,5 @@
 [Unit]
-Description=Sync Spotify and YouTube Music sources into Navidrome
+Description=Sync Spotify playlists into Navidrome with spotDL
 Documentation=file:/home/aym-n/homelab/README.md
 
 [Service]
@@ -7,7 +7,6 @@ Type=oneshot
 WorkingDirectory=/home/aym-n/homelab
 Environment=SPOTDL_THREADS=3
 Environment=SPOTDL_MAX_RETRIES=2
-Environment=YTMUSIC_LIMIT=5000
 Nice=10
 IOSchedulingClass=best-effort
 IOSchedulingPriority=7
