@@ -5,6 +5,7 @@ repo_dir=/home/aym-n/homelab
 music_dir=/data/compose/navidrome/music
 spotdl_bin=${SPOTDL_BIN:-$HOME/.local/bin/spotdl}
 playlists_file=${PLAYLISTS_FILE:-$repo_dir/stacks/navidrome/playlists}
+spotdl_archive_file=${SPOTDL_ARCHIVE_FILE:-$music_dir/.spotdl-archive.txt}
 spotdl_threads=${SPOTDL_THREADS:-1}
 spotdl_max_retries=${SPOTDL_MAX_RETRIES:-2}
 spotdl_extra_args=${SPOTDL_EXTRA_ARGS:-}
@@ -107,11 +108,11 @@ if [[ -n $spotdl_extra_args ]]; then
   read -r -a extra_args <<< "$spotdl_extra_args"
 fi
 
-echo "Configured spotDL sync: playlists=${#urls[@]}, threads=$spotdl_threads, max_retries=$spotdl_max_retries, music_dir=$music_dir."
+echo "Configured spotDL sync: playlists=${#urls[@]}, threads=$spotdl_threads, max_retries=$spotdl_max_retries, music_dir=$music_dir, archive=$spotdl_archive_file."
 
 if [[ $dry_run -eq 1 ]]; then
   echo "Dry run only; no downloads will be started."
-  echo "Would run spotDL sequentially with: $spotdl_bin --threads $spotdl_threads [extra args] download <playlist-url>"
+  echo "Would run spotDL sequentially with: $spotdl_bin --threads $spotdl_threads --archive $spotdl_archive_file [extra args] download <playlist-url>"
   exit 0
 fi
 
@@ -121,7 +122,7 @@ for index in "${!urls[@]}"; do
   max_attempts=$((spotdl_max_retries + 1))
 
   echo "Downloading/updating playlist $playlist_number/${#urls[@]}."
-  until "$spotdl_bin" --threads "$spotdl_threads" "${extra_args[@]}" download "${urls[$index]}"; do
+  until "$spotdl_bin" --threads "$spotdl_threads" --archive "$spotdl_archive_file" "${extra_args[@]}" download "${urls[$index]}"; do
     if (( attempt >= max_attempts )); then
       echo "spotDL failed for playlist $playlist_number/${#urls[@]} after $attempt attempt(s)." >&2
       exit 1
