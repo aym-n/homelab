@@ -1,2 +1,10 @@
-# Real Spotify playlist URLs are local configuration.
+# Real source URLs and auth files are local configuration.
 playlists
+sources
+.ytmusicapi-*.json
+ytmusicapi-*.json
+oauth.json
+headers_auth.json
+client_id
+client_secret
+youtube-music-cookies.txt
