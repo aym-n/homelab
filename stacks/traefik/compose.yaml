@@ -25,6 +25,7 @@ services:
       - "traefik.http.routers.dashboard.rule=Host(`traefik.aymn.systems`)"
       - "traefik.http.routers.dashboard.service=api@internal"
       - "traefik.http.routers.dashboard.entrypoints=web"
+      - "traefik.http.routers.dashboard.middlewares=homelab-basicauth@file"
 
 networks:
   traefik-net:
