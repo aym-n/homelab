@@ -3,4 +3,4 @@ http:
     homelab-basicauth:
       basicAuth:
         users:
-          - 'aym-n:$2y$05$ok6hVda2fiZCMt/PfRnYgOPgF.LaVdomjUrz7JSzwOGTNAfVefeyO'
+          - 'aym-n:$2y$12$ptSzr5MtrKULmTqUYdUe4u6jSt5TyEVat/4Dv6YcsucPUpzhHWZSq'
