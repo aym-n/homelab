@@ -67,6 +67,15 @@ SPOTDL_THREADS=1 ~/homelab/scripts/spotdl-navidrome-sync.sh
 SPOTDL_THREADS=2 SPOTDL_MAX_RETRIES=1 ~/homelab/scripts/spotdl-navidrome-sync.sh
 ```
 
+For a one-off playlist sync without editing `stacks/navidrome/playlists`, pass one or more playlist URLs directly:
+
+```bash
+~/homelab/scripts/spotdl-navidrome-oneoff.sh '<spotify-playlist-url>' ['<spotify-playlist-url>' ...]
+~/homelab/scripts/spotdl-navidrome-oneoff.sh --check '<spotify-playlist-url>'
+```
+
+The one-off script uses the same music directory, archive file, lock file, retry settings, and default `SPOTDL_THREADS=1` behavior as the scheduled sync. It writes a timestamped redacted log under `/tmp` by default.
+
 Manage the hourly timer with:
 
 ```bash
@@ -75,4 +84,3 @@ systemctl --user status spotdl-navidrome-sync.timer
 systemctl --user list-timers spotdl-navidrome-sync.timer
 journalctl --user -u spotdl-navidrome-sync.service -n 100 --no-pager
 ```
-
