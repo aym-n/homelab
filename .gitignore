@@ -7,3 +7,8 @@
 # Runtime logs
 **/logs/
 *.log
+
+# Beszel runtime state
+stacks/beszel/beszel_data/
+stacks/beszel/beszel_agent_data/
+stacks/beszel/beszel_socket/

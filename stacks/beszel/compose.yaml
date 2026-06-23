@@ -1,0 +1,42 @@
+services:
+  beszel:
+    image: henrygd/beszel:latest
+    container_name: beszel
+    restart: unless-stopped
+    environment:
+      APP_URL: https://beszel.aymn.systems
+    volumes:
+      - ./beszel_data:/beszel_data
+      - ./beszel_socket:/beszel_socket
+    networks:
+      - traefik-net
+    labels:
+      - "traefik.enable=true"
+      - "traefik.docker.network=homelab-stack_traefik-net"
+      - "traefik.http.routers.beszel.rule=Host(`beszel.aymn.systems`)"
+      - "traefik.http.routers.beszel.entrypoints=web"
+      - "traefik.http.services.beszel.loadbalancer.server.port=8090"
+
+  beszel-agent:
+    image: henrygd/beszel-agent:latest
+    container_name: beszel-agent
+    restart: unless-stopped
+    network_mode: host
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+      - ./beszel_agent_data:/var/lib/beszel-agent
+      - ./beszel_socket:/beszel_socket
+    environment:
+      LISTEN: /beszel_socket/beszel.sock
+      KEY: ${BESZEL_AGENT_KEY}
+      TOKEN: ${BESZEL_AGENT_TOKEN}
+      HUB_URL: https://beszel.aymn.systems
+      PRIMARY_SENSOR: coretemp_package_id_0
+      SENSORS_TIMEOUT: 4s
+    depends_on:
+      - beszel
+
+networks:
+  traefik-net:
+    name: homelab-stack_traefik-net
+    external: true
