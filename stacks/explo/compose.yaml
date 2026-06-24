@@ -1,0 +1,51 @@
+services:
+  explo:
+    image: ghcr.io/lumepart/explo:latest
+    container_name: explo
+    restart: unless-stopped
+    env_file:
+      - .env
+    environment:
+      TZ: ${TZ:-Asia/Kolkata}
+      WEB_UI: "true"
+      UI_USERNAME: ${UI_USERNAME}
+      UI_PASSWORD: ${UI_PASSWORD}
+    volumes:
+      - ./.env:/opt/explo/.env
+      - ./config:/opt/explo/config
+      - /data/compose/navidrome/music/explo:/data
+    networks:
+      - traefik-net
+    labels:
+      - traefik.enable=true
+      - traefik.docker.network=homelab-stack_traefik-net
+      - traefik.http.routers.explo.rule=Host(`explo.aymn.systems`)
+      - traefik.http.routers.explo.entrypoints=web
+      - traefik.http.services.explo.loadbalancer.server.port=7288
+
+  explo-postprocess:
+    image: ghcr.io/lumepart/explo:latest
+    container_name: explo-postprocess
+    restart: unless-stopped
+    network_mode: none
+    depends_on:
+      - explo
+    env_file:
+      - .env
+    environment:
+      EXPLO_POSTPROCESS_ROOT: /data
+      EXPLO_CONFIG_DIR: /opt/explo/config
+      EXPLO_ALBUM_ARTIST: Various Artists
+      POSTPROCESS_INTERVAL_SECONDS: ${POSTPROCESS_INTERVAL_SECONDS:-300}
+    volumes:
+      - ./config:/opt/explo/config
+      - ./postprocess.py:/opt/explo/postprocess.py:ro
+      - /data/compose/navidrome/music/explo:/data
+    entrypoint: ["/bin/sh", "-lc"]
+    command:
+      - while true; do python3 /opt/explo/postprocess.py || true; sleep $${POSTPROCESS_INTERVAL_SECONDS:-300}; done
+
+networks:
+  traefik-net:
+    external: true
+    name: homelab-stack_traefik-net
