@@ -18,6 +18,8 @@ services:
       - ollama
     environment:
       OLLAMA_BASE_URL: http://ollama:11434
+      OPENAI_API_BASE_URL: http://hermes-agent:8642/v1
+      OPENAI_API_KEY: ${HERMES_API_SERVER_KEY}
     ports:
       - "100.79.113.109:3000:8080"
     volumes:
