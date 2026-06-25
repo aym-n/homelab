@@ -10,6 +10,10 @@ services:
       TZ: "Asia/Kolkata"
       MEMORY: "2G"
       ENABLE_ROLLING_LOGS: "true"
+      # Require players to authenticate with Mojang/Microsoft accounts.
+      ONLINE_MODE: "TRUE"
+      # Leave whitelist disabled until allowed player usernames are available.
+      # To restrict later, add ENABLE_WHITELIST: "TRUE" and WHITELIST: "user1,user2".
     volumes:
       - minecraft-data:/data
     stdin_open: true
