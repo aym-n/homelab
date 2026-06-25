@@ -5,6 +5,7 @@ services:
     restart: unless-stopped
     ports:
       - "25565:25565/tcp"
+      - "24454:24454/udp"
     environment:
       EULA: "TRUE"
       TZ: "Asia/Kolkata"
@@ -13,7 +14,7 @@ services:
       VERSION: "26.2"
       # Fabric keeps vanilla client compatibility while allowing server-side performance mods.
       TYPE: "FABRIC"
-      MODS: "https://cdn.modrinth.com/data/gvQqBUqZ/versions/x1OEDMlF/lithium-fabric-0.25.0%2Bmc26.2.jar,https://cdn.modrinth.com/data/uXXizFIs/versions/d5ddUdiB/ferritecore-9.0.0-fabric.jar"
+      MODS: "https://cdn.modrinth.com/data/gvQqBUqZ/versions/x1OEDMlF/lithium-fabric-0.25.0%2Bmc26.2.jar,https://cdn.modrinth.com/data/uXXizFIs/versions/d5ddUdiB/ferritecore-9.0.0-fabric.jar,https://cdn.modrinth.com/data/9eGKb6K1/versions/bvaEHE2T/voicechat-fabric-2.6.20%2B26.2.jar"
       ENABLE_ROLLING_LOGS: "true"
       # Allow offline/non-Microsoft clients on this private server.
       ONLINE_MODE: "FALSE"
