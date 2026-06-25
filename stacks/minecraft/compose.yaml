@@ -11,6 +11,9 @@ services:
       MEMORY: "2G"
       # Pin the server so clients do not break when Mojang latest advances.
       VERSION: "26.2"
+      # Fabric keeps vanilla client compatibility while allowing server-side performance mods.
+      TYPE: "FABRIC"
+      MODS: "https://cdn.modrinth.com/data/gvQqBUqZ/versions/x1OEDMlF/lithium-fabric-0.25.0%2Bmc26.2.jar,https://cdn.modrinth.com/data/uXXizFIs/versions/d5ddUdiB/ferritecore-9.0.0-fabric.jar"
       ENABLE_ROLLING_LOGS: "true"
       # Allow offline/non-Microsoft clients on this private server.
       ONLINE_MODE: "FALSE"
