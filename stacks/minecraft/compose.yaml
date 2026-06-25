@@ -9,6 +9,8 @@ services:
       EULA: "TRUE"
       TZ: "Asia/Kolkata"
       MEMORY: "2G"
+      # Pin the server so clients do not break when Mojang latest advances.
+      VERSION: "26.2"
       ENABLE_ROLLING_LOGS: "true"
       # Require players to authenticate with Mojang/Microsoft accounts.
       ONLINE_MODE: "TRUE"
