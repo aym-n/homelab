@@ -1,0 +1,20 @@
+services:
+  minecraft:
+    image: itzg/minecraft-server:latest
+    container_name: minecraft
+    restart: unless-stopped
+    ports:
+      - "25565:25565/tcp"
+    environment:
+      EULA: "TRUE"
+      TZ: "Asia/Kolkata"
+      MEMORY: "2G"
+      ENABLE_ROLLING_LOGS: "true"
+    volumes:
+      - minecraft-data:/data
+    stdin_open: true
+    tty: true
+
+volumes:
+  minecraft-data:
+    name: minecraft_data
