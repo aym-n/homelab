@@ -11,6 +11,10 @@
         href: https://traefik.aymn.systems
         description: Reverse proxy dashboard
         icon: traefik
+    - Beszel:
+        href: https://beszel.aymn.systems
+        description: System monitoring
+        icon: beszel
 
 - Apps:
     - Immich:
