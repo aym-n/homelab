@@ -12,8 +12,9 @@ services:
       # Pin the server so clients do not break when Mojang latest advances.
       VERSION: "26.2"
       ENABLE_ROLLING_LOGS: "true"
-      # Require players to authenticate with Mojang/Microsoft accounts.
-      ONLINE_MODE: "TRUE"
+      # Allow offline/non-Microsoft clients on this private server.
+      ONLINE_MODE: "FALSE"
+      ENFORCE_SECURE_PROFILE: "FALSE"
       # Leave whitelist disabled until allowed player usernames are available.
       # To restrict later, add ENABLE_WHITELIST: "TRUE" and WHITELIST: "user1,user2".
     volumes:
