@@ -1,0 +1,42 @@
+[
+  {
+    "id": "custom-1798521a",
+    "name": "Roadtrip Vibes",
+    "source": "spotify",
+    "source_url": "https://open.spotify.com/playlist/4Wa3WBBNW5Q96Q0JH5rX7W",
+    "artwork_url": "https://mosaic.scdn.co/300/ab67616d00001e020acb5a72549287bf33b51b71ab67616d00001e0219798eaffbc037d3a21dcf37ab67616d00001e027037561f1e7a2c5ff3cd0a38ab67616d00001e02707ea5b8023ac77d31756ed4",
+    "refresh_days": 0,
+    "color_index": 0,
+    "last_fetched": "2026-06-23T19:32:31.249816857Z"
+  },
+  {
+    "id": "custom-4e62a053",
+    "name": "Gym",
+    "source": "spotify",
+    "source_url": "https://open.spotify.com/playlist/41myixoOhHChQu1SuqlojS",
+    "artwork_url": "https://mosaic.scdn.co/300/ab67616d00001e02197f778e9f68a8ab1d7da3f8ab67616d00001e02712701c5e263efc8726b1464ab67616d00001e02b84b0516d901f95461bb5165ab67616d00001e02bae887e6d470bb67aba815cd",
+    "refresh_days": 0,
+    "color_index": 1,
+    "last_fetched": "2026-06-23T20:05:09.377022493Z"
+  },
+  {
+    "id": "custom-4fc14eff",
+    "name": "Hype",
+    "source": "spotify",
+    "source_url": "https://open.spotify.com/playlist/2LkcC2bM7mH26M2oV5dZwm",
+    "artwork_url": "https://image-cdn-ak.spotifycdn.com/image/ab67706c0000da84eed075419c55cbfe8abed0d5",
+    "refresh_days": 0,
+    "color_index": 2,
+    "last_fetched": "2026-06-24T14:00:01.802077793Z"
+  },
+  {
+    "id": "custom-ae52877a",
+    "name": "My Shazam Tracks",
+    "source": "spotify",
+    "source_url": "https://open.spotify.com/playlist/4hNPur3IbQsZoJpJb7w6cB",
+    "artwork_url": "https://mosaic.scdn.co/300/ab67616d00001e022ffc2c580b6595a3e675a730ab67616d00001e0249ebebcf0bd7042e5ef931beab67616d00001e025c9890c0456a3719eeecd8aaab67616d00001e02ac888ad505c39f50656eac16",
+    "refresh_days": 0,
+    "color_index": 3,
+    "last_fetched": "2026-06-27T06:09:58.226457151Z"
+  }
+]

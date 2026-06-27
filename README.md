@@ -1,85 +1,63 @@
 # Homelab
 
-Unified Docker Compose stacks for aym-n homelab.
+Docker Compose configuration and helper scripts for the homelab.
 
 ## Layout
-- `dockge/` - Stack management UI (https://dockge.aymn.systems)
-- `stacks/` - Individual service stacks managed by Dockge
-- `scripts/apply-all.sh` - Boot-time stack startup
 
-## Commands
-```bash
-~/homelab/scripts/apply-all.sh      # start all stacks
-~/homelab/scripts/health-check.sh   # local routing smoke test
-cd ~/homelab/stacks/traefik && docker compose up -d
-```
+- `dockge/` - Dockge stack manager.
+- `stacks/` - Service stacks and per-service configuration.
+- `scripts/` - Operational helpers for startup, health checks, and media sync.
 
-Use `docker compose` v2 only (never `docker-compose` v1).
-
-## Navidrome tools
-Download Spotify tracks or playlists into the Navidrome music library with the host spotDL install:
+## Common Commands
 
 ```bash
-~/homelab/scripts/spotdl-navidrome.sh download '<spotify-url-or-playlist>'
+~/homelab/scripts/apply-all.sh
+~/homelab/scripts/health-check.sh
 ```
 
-Upgrade spotDL with:
+Use Docker Compose v2:
 
 ```bash
-pipx install spotdl --force
+docker compose up -d
 ```
 
-### Spotify playlist sync
+## Media Sync
 
-Create the local playlist config from the tracked example, then replace the placeholder with your Spotify playlist URL:
+Navidrome playlist sync uses spotDL and the local playlist file at:
+
+```text
+~/homelab/stacks/navidrome/playlists
+```
+
+Create it from the tracked example:
 
 ```bash
 cp ~/homelab/stacks/navidrome/playlists.example ~/homelab/stacks/navidrome/playlists
-$EDITOR ~/homelab/stacks/navidrome/playlists
 ```
 
-The real playlist file is `~/homelab/stacks/navidrome/playlists` and is ignored by git. Add one Spotify playlist URL per line; blank lines and lines beginning with `#` are skipped.
+Add one Spotify playlist URL per line. Blank lines and lines starting with `#` are ignored.
 
-The sync script is intentionally conservative to avoid overlapping runs and OOMs:
-
-- `SPOTDL_THREADS=1` by default; passed to spotDL as `--threads`.
-- `SPOTDL_MAX_RETRIES=2` by default; retries each playlist sequentially before failing.
-- `SPOTDL_EXTRA_ARGS` can pass extra whitespace-separated spotDL options.
-- `SPOTDL_LOCK_FILE` can override the default lock at `$XDG_RUNTIME_DIR/spotdl-navidrome-sync.lock` or `/tmp/spotdl-navidrome-sync.lock`.
-
-Run a sync manually with either command:
+Manual sync:
 
 ```bash
 ~/homelab/scripts/spotdl-navidrome-sync.sh
-systemctl --user start spotdl-navidrome-sync.service
 ```
 
-Validate configuration without downloading:
+Validate without downloading:
 
 ```bash
 ~/homelab/scripts/spotdl-navidrome-sync.sh --check
 ```
 
-Run manually with reduced or increased spotDL threads:
+One-off playlist sync:
 
 ```bash
-SPOTDL_THREADS=1 ~/homelab/scripts/spotdl-navidrome-sync.sh
-SPOTDL_THREADS=2 SPOTDL_MAX_RETRIES=1 ~/homelab/scripts/spotdl-navidrome-sync.sh
+~/homelab/scripts/spotdl-navidrome-oneoff.sh SPOTIFY_PLAYLIST_URL
 ```
 
-For a one-off playlist sync without editing `stacks/navidrome/playlists`, pass one or more playlist URLs directly:
+Timer management:
 
 ```bash
-~/homelab/scripts/spotdl-navidrome-oneoff.sh '<spotify-playlist-url>' ['<spotify-playlist-url>' ...]
-~/homelab/scripts/spotdl-navidrome-oneoff.sh --check '<spotify-playlist-url>'
-```
-
-The one-off script uses the same music directory, archive file, lock file, retry settings, and default `SPOTDL_THREADS=1` behavior as the scheduled sync. It writes a timestamped redacted log under `/tmp` by default.
-
-Manage the hourly timer with:
-
-```bash
-systemctl --user enable --now spotdl-navidrome-sync.timer
 systemctl --user status spotdl-navidrome-sync.timer
 systemctl --user list-timers spotdl-navidrome-sync.timer
 journalctl --user -u spotdl-navidrome-sync.service -n 100 --no-pager
